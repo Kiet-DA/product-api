@@ -322,7 +322,12 @@ jobs:
           }
 
           if (-not $pulled) {
-            throw "Khong tai duoc image tu Docker Hub sau 3 lan thu"
+            docker image inspect doananhkiet537/product-api:latest *> $null
+            if ($LASTEXITCODE -eq 0) {
+              Write-Warning "Docker Hub tam thoi khong tai duoc; tiep tuc voi image latest da co san tren runner"
+            } else {
+              throw "Khong tai duoc image tu Docker Hub va runner khong co image cache"
+            }
           }
 
       - name: Cap nhat container va cho healthcheck
