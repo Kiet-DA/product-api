@@ -307,9 +307,22 @@ jobs:
 
       - name: Tai image tu Docker Hub
         run: |
-          docker compose -f docker-compose-prod.yaml pull api
-          if ($LASTEXITCODE -ne 0) {
-            throw "Khong tai duoc image tu Docker Hub"
+          $pulled = $false
+          for ($attempt = 1; $attempt -le 3; $attempt++) {
+            docker compose -f docker-compose-prod.yaml pull api
+            if ($LASTEXITCODE -eq 0) {
+              $pulled = $true
+              break
+            }
+
+            if ($attempt -lt 3) {
+              Write-Host "Lan tai image thu $attempt that bai; thu lai sau 15 giay"
+              Start-Sleep -Seconds 15
+            }
+          }
+
+          if (-not $pulled) {
+            throw "Khong tai duoc image tu Docker Hub sau 3 lan thu"
           }
 
       - name: Cap nhat container va cho healthcheck
