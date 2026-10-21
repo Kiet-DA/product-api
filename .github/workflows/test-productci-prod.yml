@@ -264,14 +264,14 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t kiet-da/product-api:latest \
-            -t kiet-da/product-api:${{ github.sha }} \
+            -t doananhkiet537/product-api:latest \
+            -t doananhkiet537/product-api:${{ github.sha }} \
             .
 
       - name: Push Docker image
         run: |
-          docker push kiet-da/product-api:${{ github.sha }}
-          docker push kiet-da/product-api:latest
+          docker push doananhkiet537/product-api:${{ github.sha }}
+          docker push doananhkiet537/product-api:latest
 
   deploy-local:
     name: deploy-local
